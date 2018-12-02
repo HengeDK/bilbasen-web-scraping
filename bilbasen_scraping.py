@@ -7,6 +7,7 @@ from helpers import format_kml_str, format_kmt_str, format_price_str
 from decimal import Decimal
 from collections import namedtuple
 import simplejson as json
+from database import insert_brand
 
 Car = namedtuple('Car', 'model link description kms year hk kml kmt moth trailer location price')
 
@@ -49,3 +50,9 @@ def extract_car_info(html_containers):
     file = open("cars.json", "w+")
     file.write(json.dumps(cars))
     file.close()
+
+
+def extract_all_brands(str_array):
+    for brand in str_array:
+        if any(char.isalpha() for char in brand):
+            insert_brand(brand)
