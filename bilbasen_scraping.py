@@ -11,6 +11,7 @@ from database import insert_brand
 from xmltodict import parse
 from urllib.request import urlopen as uReq
 from bilbasen_soup import get_soup_for_car_extraction, get_soup_for_pages_extraction
+import re
 
 
 Car = namedtuple('Car', 'model link description kms year hk kml kmt moth trailer location price')
@@ -20,16 +21,20 @@ def get_count_of_pages():
     soup = get_soup_for_pages_extraction()
     uls = soup.find("ul", {"class": "pagination pull-right"})
 
-    count = 0
-    page_count = 0
+    highest = 0
     lis = uls.findAll("li")
+
     for li in lis:
-        if li.text == ">":
-            page_count_str = lis[count+1].text
-            print(li)
-            page_count = int(page_count_str.replace(".", ""))
-        count += 1
-    print(page_count)
+        if li.text != "<" and li.text != "":
+            text = li.text.replace(".", "")
+            if int(text) > highest:
+                highest = int(text)
+
+    return highest
+
+
+
+
 
 
 def extract_car_info(html_containers):
