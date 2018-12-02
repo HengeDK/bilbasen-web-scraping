@@ -1,6 +1,7 @@
 # An ad listing can either be 'plus', 'discount' or 'exclusive'
 # The class name of the div container depends on this type
 
+
 def CONST_PLUS_AD_TYPE():
     return "row listing listing-plus bb-listing-clickable"
 

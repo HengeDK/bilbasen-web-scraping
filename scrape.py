@@ -1,6 +1,9 @@
 from urllib.request import urlopen as uReq
 from bs4 import BeautifulSoup as soup
-import listing_types as AD_TYPE
+import constants.listing_types as AD_TYPE
+from bilbasen_scraping import extract_car_info
+
+
 
 # URL to scrape
 bmw_url = "https://www.bilbasen.dk/brugt/bil/bmw"
@@ -17,5 +20,12 @@ page_soup = soup(page_html, "html.parser")
 
 # Grab the divs containing the cars, currently only 1 page, and currently only the 'plus' listing type
 containers = page_soup.findAll("div", {"class": AD_TYPE.CONST_PLUS_AD_TYPE()})
-print(len(containers))
+
+extract_car_info(containers)
+
+
+
+
+
+
 
