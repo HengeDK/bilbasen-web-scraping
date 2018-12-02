@@ -23,8 +23,10 @@ def get_db_connection():
 
 
 def insert_brand(brand_str):
+    conn = get_db_connection()
     sql = f"INSERT INTO Brands(brand) VALUES('{brand_str}')"
-    print(sql)
+    conn.cursor().execute(sql)
+    conn.commit()
 
 
 def get_car_brands():
@@ -50,7 +52,7 @@ def table_exists(table):
 
 def delete_table(table):
     conn = get_db_connection()
-    if table_exists(conn, table):
+    if table_exists(table):
         sql = "DROP TABLE " + table
         conn.cursor().execute(sql)
         conn.commit()

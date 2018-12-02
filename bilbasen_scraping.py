@@ -8,8 +8,28 @@ from decimal import Decimal
 from collections import namedtuple
 import simplejson as json
 from database import insert_brand
+from xmltodict import parse
+from urllib.request import urlopen as uReq
+from bilbasen_soup import get_soup_for_car_extraction, get_soup_for_pages_extraction
+
 
 Car = namedtuple('Car', 'model link description kms year hk kml kmt moth trailer location price')
+
+
+def get_count_of_pages():
+    soup = get_soup_for_pages_extraction()
+    uls = soup.find("ul", {"class": "pagination pull-right"})
+
+    count = 0
+    page_count = 0
+    lis = uls.findAll("li")
+    for li in lis:
+        if li.text == ">":
+            page_count_str = lis[count+1].text
+            print(li)
+            page_count = int(page_count_str.replace(".", ""))
+        count += 1
+    print(page_count)
 
 
 def extract_car_info(html_containers):
@@ -52,7 +72,15 @@ def extract_car_info(html_containers):
     file.close()
 
 
-def extract_all_brands(str_array):
-    for brand in str_array:
-        if any(char.isalpha() for char in brand):
-            insert_brand(brand)
+def extract_car_brands_and_fill_table():
+    url = "https://api.bilbasen.dk/metadata/makes/car?Category=bil&apikey=B3BAB31C-ED9B-4E40-8C2A-8C6627C1C685"
+    uClient = uReq(url)
+    xml = uClient.read()
+    uClient.close()
+
+    parsed = parse(xml)
+    dicts = parsed["Makes"]["Make"]
+
+    for di in dicts:
+        if any(char.isalpha() for char in di["Name"]):
+            insert_brand(di["Name"])

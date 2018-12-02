@@ -1,15 +1,13 @@
-from bilbasen_scraping import extract_car_info, extract_all_brands
+from bilbasen_scraping import extract_car_info, extract_car_brands_and_fill_table, get_count_of_pages
 import sys
 import database as db
-from bilbasen_soup import get_str_array_brands
 
 
 def setup(max_pages):
     db.create_car_brand_table()
-    car_brands_str_array = get_str_array_brands()
-    extract_all_brands(car_brands_str_array)
+    extract_car_brands_and_fill_table()
 
-
+    get_count_of_pages()
 
 
 def main():
