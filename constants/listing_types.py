@@ -5,6 +5,7 @@
 def CONST_PLUS_AD_TYPE():
     return "row listing listing-plus bb-listing-clickable"
 
+
 def CONST_PLUS_DISCOUNT_TYPE():
     return "row listing listing-discount bb-listing-clickable"
 

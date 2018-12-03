@@ -1,25 +1,10 @@
 import pyodbc
 from pandas import read_sql_query
-
-
-def CONST_DB_SERVER():
-    return "localhost"
-
-
-def CONST_DB_NAME():
-    return "bilbasendb"
-
-
-def CONST_DB_USERNAME():
-    return "virtus"
-
-
-def CONST_DB_PASSWORD():
-    return "password"
+import constants.database_conf as db_conf
 
 
 def get_db_connection():
-    conn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER=' + CONST_DB_SERVER() + ';DATABASE=' + CONST_DB_NAME() + ';UID=' + CONST_DB_USERNAME() + ';PWD=' + CONST_DB_PASSWORD())
+    conn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER=' + db_conf.CONST_DB_SERVER() + ';DATABASE=' + db_conf.CONST_DB_NAME() + ';UID=' + db_conf.CONST_DB_USERNAME() + ';PWD=' + db_conf.CONST_DB_PASSWORD())
     return conn
 
 

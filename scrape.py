@@ -1,7 +1,7 @@
-from bilbasen_scraping import extract_car_info, extract_car_brands_and_fill_table, get_count_of_pages
+from bilbasen_scraping import extract_car_brands_and_fill_table
 import sys
 import database as db
-from bilbasen_scraping import get_range_for_pages, start_scraping_cars
+from bilbasen_scraping import start_scraping_cars
 
 
 def setup(max_pages):
