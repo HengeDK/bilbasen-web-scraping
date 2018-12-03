@@ -1,6 +1,7 @@
 import pyodbc
 from pandas import read_sql_query
 
+
 def CONST_DB_SERVER():
     return "localhost"
 
@@ -37,6 +38,28 @@ def get_car_brands():
     return all_brands
 
 
+def insert_car(car):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("INSERT INTO Cars (Model, Link, "
+                    "Description, Kms, Year, Kml, Kmt, Moth, "
+                    "Trailer, Location, Price) VALUES('%s', '%s', "
+                    "'%s', '%s','%s','%s','%s','%s','%s','%s','%s')" %
+                   (getattr(car, 'model'),
+                    getattr(car, 'link'),
+                    getattr(car, 'description'),
+                    getattr(car, 'kms'),
+                    getattr(car, 'year'),
+                    getattr(car, 'kml'),
+                    getattr(car, 'kmt'),
+                    getattr(car, 'moth'),
+                    getattr(car, 'trailer'),
+                    getattr(car, 'location'),
+                    getattr(car, 'price')))
+    conn.commit()
+
+
 def table_exists(table):
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -66,3 +89,17 @@ def create_car_brand_table():
     conn.cursor().execute("CREATE TABLE Brands(Brand CHAR(100))")
     conn.commit()
 
+
+def create_cars_table():
+    conn = get_db_connection()
+    if table_exists('Cars'):
+        delete_table('Cars')
+
+    command = "CREATE TABLE Cars (Model CHAR(100), " + \
+              "Link CHAR(100), Description nvarchar(max), Kms INT, " + \
+              "Year INT, Kml FLOAT(50), Kmt FLOAT(50), " + \
+              "Moth CHAR(30), Trailer CHAR(30), Location CHAR(50), " + \
+              "Price INT)"
+
+    conn.cursor().execute(command)
+    conn.commit()

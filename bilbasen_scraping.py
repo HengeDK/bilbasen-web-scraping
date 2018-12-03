@@ -6,13 +6,11 @@ import constants.listing_location_types as LOCATION_TYPE
 from helpers import format_kml_str, format_kmt_str, format_price_str
 from decimal import Decimal
 from collections import namedtuple
-import simplejson as json
 from database import insert_brand
 from xmltodict import parse
 from urllib.request import urlopen as uReq
 from bilbasen_soup import get_soup_for_car_extraction, get_soup_for_pages_extraction
-import re
-
+import database as db
 
 Car = namedtuple('Car', 'model link description kms year hk kml kmt moth trailer location price')
 
@@ -33,13 +31,25 @@ def get_count_of_pages():
     return highest
 
 
+def get_range_for_pages():
+    count = get_count_of_pages() + 1
+    arr = list(range(1, count))
+    return arr
 
 
+def start_scraping_cars(page_limit):
+    page_limit = int(page_limit)
+    if page_limit == 0:
+        page_limit = get_count_of_pages()
+
+    page_arr = list(range(1, page_limit + 1))
+    for page_num in page_arr:
+        print(f"Scraping page: {page_num}")
+        soup = get_soup_for_car_extraction(page_num)
+        extract_car_info(soup)
 
 
 def extract_car_info(html_containers):
-    cars = []
-
     for container in html_containers:
         anchor = container.find("a", {"class": ANCHOR_TYPE.CONST_CAR_LISTING_MAIN_ANCHOR()})
 
@@ -70,11 +80,7 @@ def extract_car_info(html_containers):
         location = container.find("div", {"class": LOCATION_TYPE.CONST_LOCATION_DIV()}).string
 
         car = Car(model, link, description, kms, year, hk, kml, kmt, moth, trailer, location, price)
-        cars.append(car)
-
-    file = open("cars.json", "w+")
-    file.write(json.dumps(cars))
-    file.close()
+        db.insert_car(car)
 
 
 def extract_car_brands_and_fill_table():

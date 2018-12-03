@@ -1,7 +1,7 @@
 from urllib.request import urlopen as uReq
 from bs4 import BeautifulSoup as soup
 import constants.listing_types as AD_TYPE
-import time
+
 
 def get_soup_for_car_extraction(page_number):
     url = f"https://www.bilbasen.dk/brugt/bil?Fuel=0&YearFrom=0&YearTo=0&PriceFrom=0&PriceTo=10000000&MileageFrom=-1&MileageTo=10000001&IncludeEngrosCVR=true&IncludeLeasing=true&page={page_number}"
