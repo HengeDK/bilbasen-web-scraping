@@ -10,7 +10,7 @@ def get_soup_for_car_extraction(page_number):
     page_html = u_client.read()
     u_client.close()
     page_soup = Soup(page_html, "html.parser")
-    containers = page_soup.findAll("div", {"class": ad_type.CONST_PLUS_AD_TYPE()})
+    containers = page_soup.findAll("div", {"class": {ad_type.CONST_PLUS_AD_TYPE(), ad_type.CONST_PLUS_DISCOUNT_TYPE(), ad_type.CONST_PLUS_EXCLUSIVE_TYPE()}})
     return containers
 
 
