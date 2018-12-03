@@ -51,9 +51,15 @@ def extract_car_info(html_containers):
 
         model = anchor.string
         link = anchor["href"]
-        description = container.find("div", {"class": descriptions_type.CONST_DESCRIPTION_TYPE()}).string or "NO_DESCRIPTION"
+
+        description = container.find("div", {"class": descriptions_type.CONST_DESCRIPTION_TYPE()})
+        if description:
+            description = description.string
+        else:
+            description = "NO_DESCRIPTION"
         if description is not "NO_DESCRIPTION" and description is not None and description is not "":
             description = description.replace("'", "''")
+        description = description.strip()
 
         specifications = container.findAll("div", {"class": specifications_type.CONST_CAR_SPECIFICATIONS()})
         unpredictable_specifications = container.find("span", {
